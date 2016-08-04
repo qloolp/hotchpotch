@@ -1,4 +1,10 @@
-#pragma once
+#ifndef TRIE_H
+#define TRIE_H
+
+#include<vector>
+namespace li
+{
+
 //            节点
 template<int capacity, class T>                        //capacity 对象元素数, T欲保存数据类型
 class node
@@ -9,7 +15,7 @@ public:
 	node* child[capacity] = {nullptr};                 //儿子节点
 	T data;
 	node() :leaf(false), count(0) {};
-	node(const T& t, bool leaf = false) :leaf(leaf), count(1),data(t) {};
+	node(const T& t, bool leaf = false) :leaf(leaf), count(0),data(t) {};
 	~node() { }
 };
 
@@ -33,7 +39,7 @@ public:
 
 	template<class Iterator>
 	void insert(Iterator first, Iterator last);
-	
+
 	template<class Iterator>
 	bool contains(Iterator first, Iterator last);
 
@@ -43,7 +49,43 @@ public:
 	unsigned int size() { return data_size; }
 
 	void clear();
+	vector<vector<T>> data();
+	void visit(pointer p,  vector<T>& prefix, vector<vector<T>>& result);
+
 };
+
+template<int capacity, class T, class K>
+inline vector<vector<T>> trie<capacity, T, K>::data()
+{
+	vector<vector<T>> result;
+	vector<T> prefix;
+	visit(&root,prefix,result);
+	return result;
+}
+
+template<int capacity, class T, class K>
+inline void trie<capacity, T, K>::visit(pointer p, vector<T>& prefix, vector<vector<T>>& result)
+{
+	if(p == nullptr)
+		return;
+	if(p != &root)
+		prefix.push_back(p->data);
+	if(p->count != 0)
+	{
+		for each(auto var in p->child)
+			if(var != nullptr)
+				visit(var,prefix,result);
+
+	}
+	if(p!=&root)
+		prefix.pop_back();
+}
+
+
+
+
+
+
 
 template<int capacity, class T, class K>
 inline trie<capacity, T, K>::trie():data_size(0)                             //构造函数
@@ -89,8 +131,8 @@ inline void trie<capacity, T, K>::insert(Iterator first, Iterator last)         
 		{
 			curr->child[index[*first]] = new node<capacity,T>(*first);
 		}
-		else
-			curr->count++;
+		
+		curr->count++;
 		curr = curr->child[index[*first]];              //转入下一个
 		first++;
 	}
@@ -124,7 +166,7 @@ inline bool trie<capacity, T, K>::contains(Iterator first, Iterator last)       
 template<int capacity, class T, class K>
 template<class Iterator>
 inline void trie<capacity, T, K>::erase(Iterator first, Iterator last)                 //删除串[first,last)若存在
-{  
+{
 	pointer curr = &root;
 	if (curr->child[index[*first]] != nullptr)
 	{
@@ -147,7 +189,7 @@ inline bool trie<capacity, T, K>::erase_node(Iterator first, Iterator last, poin
 
 		if (p->count != 0)            //有后继节点，不能删除
 		{
-			p->leaf = false;         
+			p->leaf = false;
 			return false;
 		}
 		else if (p->leaf)             //为叶子节点，无后继节点，可删除
@@ -161,9 +203,13 @@ inline bool trie<capacity, T, K>::erase_node(Iterator first, Iterator last, poin
 		if (erase_node(first + 1, last, p->child[index[*(first+1)]]) == true)
 		{
 			delete p->child[index[*(first+1)]];
-			if (p->count == 1)                         //可删除本节点
+			if (p->count == 0)                         //可删除本节点
 				return true;
 		}
 	}
 	return false;
 }
+
+}
+
+#endif
