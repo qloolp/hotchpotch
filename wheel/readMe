@@ -1,0 +1,5 @@
+次文件夹包含四个子项：allocator,vector,list,trie.
+allocator:标准配置器，是对new,与delete的简单封装，效率不够好。
+vector：向量，基于数组的模板容器，使用alloctor。
+list:列表，基于双向循环链表的模板容,使用默认alloc配置器。
+trie:trie树，用于存储及快速检索对象串。

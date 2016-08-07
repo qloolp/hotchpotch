@@ -22,7 +22,7 @@ public:
 
 
 
-template<int capacity, class T, class K>                       //capacity 对象元素数， K仿函数：将对象映射至唯一的unsigned范围为[0,capacity)
+template<int capacity, class T, class K>                       //capacity 对象元素数， K函数对象：将对象映射至唯一的unsigned范围为[0,capacity)
 class trie
 {
 	typedef node<capacity, T>* pointer;

@@ -11,8 +11,8 @@ namespace li
     template<class T, class Allocator = li::allocator<T> >
     class vector
     {
-    public:
-        typedef T*            iterator;
+    public:                            //STL标准规定
+        typedef T*            iterator;                   //因为是基于数组的，所以传统指针即具有迭代器功能                   
         typedef const T*      const_iterator;
         typedef T&            reference;
         typedef const T&      const_reference;
@@ -27,7 +27,7 @@ namespace li
         iterator start;
         iterator finish;
         iterator end_of_storage;
-        void insert_aux(iterator position, const T& x)
+        void insert_aux(iterator position, const T& x)            //插入，若空间不够则申请新的空间，并拷贝原有内容
         {
             if(finish != end_of_storage)
             {
@@ -67,7 +67,7 @@ namespace li
         }
 
 
-        pointer allocate_and_copy(const_iterator first, const_iterator last)
+        pointer allocate_and_copy(const_iterator first, const_iterator last)   //申请空间并拷贝区间内容
         {
             difference_type len = last-first;
             pointer temp = allocator<T>::allocate(size_type(len));
@@ -76,7 +76,7 @@ namespace li
             return temp;
         }
 
-        pointer allocate_and_fill(size_type n, const T val = T())
+        pointer allocate_and_fill(size_type n, const T val = T())                //申请空间，并填充指定内容
         {
             pointer temp = allocator<T>::allocate(n);
             for(int i=0; i<n; i++)
@@ -84,7 +84,7 @@ namespace li
             return temp;
          }
 
-         void destroy(iterator first, iterator last)
+         void destroy(iterator first, iterator last)              //析构区间内对象
          {
             while(first!=last)
             {
