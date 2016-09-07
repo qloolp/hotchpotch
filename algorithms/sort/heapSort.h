@@ -2,8 +2,8 @@
 
 void heapify(int* A, int i, int size)
 {
-	int left = 2 * i;
-	int right = 2 * i + 1;
+	int left = 2 * i+1;
+	int right = 2 * i + 2;
 	int max;
 	if (left<size && A[left]>A[i])
 		max = left;

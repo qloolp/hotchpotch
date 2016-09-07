@@ -10,11 +10,11 @@ private:
 	T* array;
 	int heapSize;
 	int heapCapacity;
-	int parent(int i) { return i / 2; }
-	int left(int i) { return 2*i; }
-	int right(int i) { return 2*i + 1; }
+	int parent(int i) { return i%2?i/2:i/2-1; }
+	int left(int i) { return 2*i+1; }
+	int right(int i) { return 2*i + 2; }
 	void maxHeapify(int i);
-	void extend();
+	void expansion();
 public:
 	maxHeap();
 	maxHeap(T* val, int num);
@@ -53,7 +53,7 @@ inline void maxHeap<T>::maxHeapify(int i)
 }
 
 template<typename T>
-inline void maxHeap<T>::extend()
+inline void maxHeap<T>::expansion()
 {
 	heapCapacity = heapCapacity == 0 ? 1 : 2 * heapCapacity;
 	T* temp = new T[heapCapacity];
